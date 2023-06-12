@@ -1,0 +1,12 @@
+# Build stage
+FROM node:14 AS build
+WORKDIR /app
+COPY ProyectoAgenda-Fe/package*.json ./
+RUN npm install
+COPY ProyectoAgenda-Fe/ ./
+RUN npm run build
+
+# Run stage
+FROM nginx:1.19.0-alpine
+COPY --from=build /app/dist/proyecto-agenda-fe /usr/share/nginx/html
+

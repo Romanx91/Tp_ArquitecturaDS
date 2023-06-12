@@ -1,0 +1,33 @@
+version: '7'
+services:
+  database:
+    image: romanx91/database:latest
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "1433:1433"
+
+  backend:
+    image: romanx91/backend:latest
+    restart: always
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: postgres://postgres:mysecretpassword@database:5432/postgres
+    ports:
+      - "7018"7018"
+
+  frontend:
+    image: romanx91/frontend:latest
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+volumes:
+  db_data:
+
